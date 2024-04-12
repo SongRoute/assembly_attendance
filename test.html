@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- 뷰포트 설정 추가 -->
+    <style>
+        #title-block {
+            background-color: #858585; /* 배경색 설정 */
+            padding: 20px 0; /* 위 아래로 20px의 공백 추가 */
+            display: inline-block; /* 좌우로 글씨에 딱 맞게 사이즈 설정 */
+            margin: 0 auto; /* 좌우 마진을 자동으로 설정하여 중앙 정렬 */
+            text-align: center; /* 텍스트를 가운데 정렬 */
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .container {
+        display: flex;
+        align-items: center;
+        }
+        .rank {
+            width: 50px; /* 순위 표시 칸의 너비를 50px로 고정 */
+            text-align: right; /* 순위를 오른쪽 정렬 */
+            margin-right: 10px; /* 순위와 막대 사이의 마진 */
+        }
+        .bar {
+            width: 0; /* 기본 너비, 인라인으로 재정의됨 */
+            height: 20px; /* 막대의 높이 */
+            margin: 5px 0; /* 막대 사이의 수직 마진 */
+            text-overflow: ellipsis; /* 텍스트가 너무 길면 ...으로 표시 */
+            white-space: nowrap; /* 줄바꿈 방지 */
+            overflow: hidden; /* 너무 긴 텍스트 숨기기 */
+        }
+        .bar1 {
+            background-color: blue; /* 1번 당의 막대 색상 */
+            color: white; /* 텍스트 색상 */
+        }
+        .bar2 {
+            background-color: red; /* 2번 당의 막대 색상 */
+            color: white; /* 텍스트 색상 */
+        }
+        .bar3 {
+            background-color: orange; /* 3번 당의 막대 색상 */
+            color: black; /* 텍스트 색상 */
+        }
+        .bar4 {
+            background-color: mediumaquamarine; /* 4번 당의 막대 색상 */
+            color: black; /* 텍스트 색상 */
+        }
+        .bar5 {
+            background-color: navy; /* 5번 당의 막대 색상 */
+            color: white; /* 텍스트 색상 */
+        }
+        .bar6{
+            background-color: skyblue; /* 6번 당의 막대 색상 */
+            color: black; /* 텍스트 색상 */
+        }
+        .bar7 {
+            background-color: violet; /* 7번 당의 막대 색상 */
+            color: black; /* 텍스트 색상 */
+        }
+    </style>
+</head>
+<body>
+    <div id="title-block">
+        <h1>National Assembly attendance rate</h1>
+        <h2 id="date"></h2>
+    </div>
+    <h3>please click the graph to see more imformation</h3>
+
+ 
+
+    <div id="graph"></div>
+
+    <script>
+        var totalMeetings = 120; // 총 회의 횟수
+        var congressmen = [];
+for (var i = 0; i < 300; i++) {
+    var name = "Congressman" + (i + 1); // 이름 생성
+    var attendance = Math.floor(Math.random() * 121); // 0부터 120까지의 랜덤 출석률 생성
+    var party = Math.floor(Math.random() * 7) + 1; // 1부터 7까지의 랜덤 당 번호 생성
+    congressmen.push({name: name, party: party, attendance: attendance});
+}
+
+        congressmen.forEach(function(congressman) {
+            congressman.attendance = (congressman.attendance / totalMeetings) * 100; // 출석률 계산
+        });
+
+        congressmen.sort(function(a, b) {
+            return b.attendance - a.attendance; // 출석률에 따라 내림차순 정렬
+        });
+
+        var graph = document.getElementById("graph");
+var graph = document.getElementById("graph");
+for (var i = 0; i < congressmen.length; i++) {
+    var rank = document.createElement("div");
+    rank.className = "rank";
+    rank.textContent = (i + 1) + "."; // 순위 추가
+
+    var bar = document.createElement("div");
+    bar.className = "bar bar" + congressmen[i].party;
+    bar.style.width = congressmen[i].attendance + "%";
+    bar.textContent = congressmen[i].name + ": " + congressmen[i].attendance.toFixed(2) + "%";
+
+    // 막대 그래프에 클릭 이벤트 추가
+    bar.addEventListener("click", (function(congressman) {
+        return function() {
+            // 새 페이지를 열고, 해당 국회의원에 대한 정보를 보여줌
+            window.open("congressman_info.html?name=" + encodeURIComponent(congressman.name), "_blank");
+        };
+    })(congressmen[i]));
+
+    var container = document.createElement("div");
+    container.className = "container"; // 클래스 추가
+    container.appendChild(rank);
+    container.appendChild(bar);
+
+    graph.appendChild(container);
+}
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('date').innerText = today;
+</script>
+</body>
